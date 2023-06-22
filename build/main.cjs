@@ -9617,7 +9617,18 @@ async function plonkExportFuncCallData(_proof, _pub) {
     { type: 'int', value: ${proof.eval_zw.toString(10)}n },
     { type: 'slice', cell: beginCell().storeBuffer(Buffer.from('${proof.Wxi}', 'hex')).endCell() },
     { type: 'slice', cell: beginCell().storeBuffer(Buffer.from('${proof.Wxiw}', 'hex')).endCell() },
-    { type: 'cell', cell: publicInputsToDict([${pub.map(e => e.toString(10) + "n").join(", ")}]) }
+    { type: 'cell', cell: ((vs: bigint[]): Cell => {
+        const d = Dictionary.empty(Dictionary.Keys.Uint(32), Dictionary.Values.BigUint(256));
+
+        for (let i = 0; i < vs.length; i++) {
+            d.set(i, vs[i]);
+        }
+
+        const b = beginCell();
+        d.storeDirect(b);
+
+        return b.endCell();
+    })([${pub.map(e => e.toString(10) + "n").join(", ")}]) }
 ]`;
 }
 
@@ -9629,7 +9640,6 @@ function pointToBlstCHex(curve, p) {
 
 function fromObjectProof(curve, proof) {
     const G1 = curve.G1;
-    // const Fr = curve.Fr;
     const res = proof;
     res.A = pointToBlstCHex(curve.G1, G1.fromObject(proof.A));
     res.B = pointToBlstCHex(curve.G1, G1.fromObject(proof.B));
@@ -9638,12 +9648,6 @@ function fromObjectProof(curve, proof) {
     res.T1 = pointToBlstCHex(curve.G1, G1.fromObject(proof.T1));
     res.T2 = pointToBlstCHex(curve.G1, G1.fromObject(proof.T2));
     res.T3 = pointToBlstCHex(curve.G1, G1.fromObject(proof.T3));
-    // res.eval_a = Fr.fromObject(proof.eval_a);
-    // res.eval_b = Fr.fromObject(proof.eval_b);
-    // res.eval_c = Fr.fromObject(proof.eval_c);
-    // res.eval_zw = Fr.fromObject(proof.eval_zw);
-    // res.eval_s1 = Fr.fromObject(proof.eval_s1);
-    // res.eval_s2 = Fr.fromObject(proof.eval_s2);
     res.Wxi = pointToBlstCHex(curve.G1, G1.fromObject(proof.Wxi));
     res.Wxiw = pointToBlstCHex(curve.G1, G1.fromObject(proof.Wxiw));
     return res;
