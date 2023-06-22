@@ -17,7 +17,7 @@
     along with snarkJS. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Scalar } from "ffjavascript";
+import { Scalar } from "@krigga/ffjavascript";
 import { readR1cs }  from "r1csfile";
 
 const bls12381r = Scalar.e("73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001", 16);

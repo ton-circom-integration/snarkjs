@@ -1,5 +1,5 @@
 import { readZKey as readZKey } from "./zkey_utils.js";
-import { utils } from "ffjavascript";
+import { utils } from "@krigga/ffjavascript";
 
 export default async function zkeyExportJson(zkeyFileName) {
 

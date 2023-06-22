@@ -19,7 +19,7 @@
 
 import ejs from "ejs";
 import {getCurveFromName} from "./curves.js";
-import {utils} from "ffjavascript";
+import {utils} from "@krigga/ffjavascript";
 
 const {unstringifyBigInts, stringifyBigInts} = utils;
 

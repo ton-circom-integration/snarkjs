@@ -22,7 +22,7 @@
 // We can use this class to avoid the allocation of a big memory buffer
 // for the coefficients because in some cases a big number of the coefficients are zero
 
-import {BigBuffer} from "ffjavascript";
+import {BigBuffer} from "@krigga/ffjavascript";
 import {log2} from "../misc.js";
 import {Polynomial} from "./polynomial.js";
 

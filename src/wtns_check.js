@@ -20,7 +20,7 @@
 import * as binFileUtils from "@iden3/binfileutils";
 import * as wtnsUtils from "./wtns_utils.js";
 import { readR1csFd } from "r1csfile";
-import { Scalar } from "ffjavascript";
+import { Scalar } from "@krigga/ffjavascript";
 import * as curves from "./curves.js";
 
 export default async function wtnsCheck(r1csFilename, wtnsFilename, logger) {

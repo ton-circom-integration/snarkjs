@@ -1,5 +1,6 @@
 import * as snarkjs from "../main.js";
 import { getCurveFromName } from "../src/curves.js";
+import { Keccak256Transcript } from "../src/Keccak256Transcript.js";
 import assert from "assert";
 import path from "path";
 
@@ -136,14 +137,14 @@ describe("Full process", function ()  {
     });
 
     it ("plonk proof", async () => {
-        const res = await snarkjs.plonk.prove(zkey_plonk, wtns);
+        const res = await snarkjs.plonk.prove(zkey_plonk, wtns, undefined, Keccak256Transcript);
         proof = res.proof;
         publicSignals = res.publicSignals;
     });
 
 
     it ("plonk verify", async () => {
-        const res = await snarkjs.plonk.verify(vKey, publicSignals, proof);
+        const res = await snarkjs.plonk.verify(vKey, publicSignals, proof, undefined, Keccak256Transcript);
         assert(res == true);
     });
 

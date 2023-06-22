@@ -17,7 +17,7 @@
     snarkjs. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import {BigBuffer} from "ffjavascript";
+import {BigBuffer} from "@krigga/ffjavascript";
 
 export class Polynomial {
     constructor(coefficients, curve, logger) {

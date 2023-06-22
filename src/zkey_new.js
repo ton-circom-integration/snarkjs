@@ -28,7 +28,7 @@ import {
     endWriteSection,
 } from "@iden3/binfileutils";
 import { log2, formatHash } from "./misc.js";
-import { Scalar, BigBuffer } from "ffjavascript";
+import { Scalar, BigBuffer } from "@krigga/ffjavascript";
 import Blake2b from "blake2b-wasm";
 import BigArray from "./bigarray.js";
 

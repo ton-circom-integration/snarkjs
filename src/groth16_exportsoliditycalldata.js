@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with snarkJS. If not, see <https://www.gnu.org/licenses/>.
 */
-import {  utils }   from "ffjavascript";
+import {  utils }   from "@krigga/ffjavascript";
 const { unstringifyBigInts} = utils;
 
 function p256(n) {

@@ -44,7 +44,7 @@
 // PointsH(9)
 // Contributions(10)
 
-import { Scalar, F1Field } from "ffjavascript";
+import { Scalar, F1Field } from "@krigga/ffjavascript";
 import * as binFileUtils from "@iden3/binfileutils";
 
 import { getCurveFromQ as getCurve } from "./curves.js";

@@ -22,7 +22,7 @@ import { WitnessCalculatorBuilder } from "circom_runtime";
 import * as wtnsUtils from "./wtns_utils.js";
 import * as binFileUtils from "@iden3/binfileutils";
 import loadSyms from "./loadsyms.js";
-import {  utils }   from "ffjavascript";
+import {  utils }   from "@krigga/ffjavascript";
 const {unstringifyBigInts} = utils;
 
 

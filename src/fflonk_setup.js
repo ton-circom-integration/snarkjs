@@ -21,7 +21,7 @@ import {readR1csFd} from "r1csfile";
 import * as utils from "./powersoftau_utils.js";
 import {createBinFile, endWriteSection, readBinFile, startWriteSection, writeBigInt,} from "@iden3/binfileutils";
 import {log2} from "./misc.js";
-import {BigBuffer, Scalar} from "ffjavascript";
+import {BigBuffer, Scalar} from "@krigga/ffjavascript";
 import BigArray from "./bigarray.js";
 import {
     ZKEY_FF_HEADER_SECTION,

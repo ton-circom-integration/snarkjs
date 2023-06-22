@@ -17,7 +17,7 @@
     along with snarkJS. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Scalar } from "ffjavascript";
+import { Scalar } from "@krigga/ffjavascript";
 import Blake2b from "blake2b-wasm";
 import * as keyPair from "./keypair.js";
 import * as misc from "./misc.js";

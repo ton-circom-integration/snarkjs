@@ -17,7 +17,7 @@
     snarkjs. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import {BigBuffer} from "ffjavascript";
+import {BigBuffer} from "@krigga/ffjavascript";
 
 export class Evaluations {
     constructor(evaluations, curve, logger) {

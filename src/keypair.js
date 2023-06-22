@@ -19,7 +19,7 @@
 
 import blake2b from "blake2b-wasm";
 
-import { ChaCha } from "ffjavascript";
+import { ChaCha } from "@krigga/ffjavascript";
 
 export function hashToG2(curve, hash) {
     const hashV = new DataView(hash.buffer, hash.byteOffset, hash.byteLength);

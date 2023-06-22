@@ -19,13 +19,12 @@
 
 /* Implementation of this paper: https://eprint.iacr.org/2019/953.pdf */
 import * as curves from "./curves.js";
-import {  utils }   from "ffjavascript";
+import {  utils }   from "@krigga/ffjavascript";
 const {unstringifyBigInts} = utils;
-import { Keccak256Transcript } from "./Keccak256Transcript.js";
 
 
 
-export default async function plonkVerify(_vk_verifier, _publicSignals, _proof, logger) {
+export default async function plonkVerify(_vk_verifier, _publicSignals, _proof, logger, Transcript) {
     let vk_verifier = unstringifyBigInts(_vk_verifier);
     _proof = unstringifyBigInts(_proof);
     let publicSignals = unstringifyBigInts(_publicSignals);
@@ -49,7 +48,7 @@ export default async function plonkVerify(_vk_verifier, _publicSignals, _proof, 
         logger.error("Invalid number of public inputs");
         return false;
     }
-    const challenges = calculatechallenges(curve, proof, publicSignals, vk_verifier);
+    const challenges = calculatechallenges(curve, proof, publicSignals, vk_verifier, Transcript);
     
     if (logger) {
         logger.debug("beta: " + Fr.toString(challenges.beta, 16));    
@@ -168,10 +167,10 @@ function isWellConstructed(curve, proof) {
     return true;
 }
 
-function calculatechallenges(curve, proof, publicSignals, vk) {
+function calculatechallenges(curve, proof, publicSignals, vk, Transcript) {
     const Fr = curve.Fr;
     const res = {};
-    const transcript = new Keccak256Transcript(curve);
+    const transcript = new Transcript(curve);
 
     // Challenge round 2: beta and gamma
     transcript.addPolCommitment(vk.Qm);

@@ -18,9 +18,9 @@
 */
 
 /* Implementation of this paper: https://eprint.iacr.org/2016/260.pdf */
-import { Scalar } from "ffjavascript";
+import { Scalar } from "@krigga/ffjavascript";
 import * as curves from "./curves.js";
-import {  utils }   from "ffjavascript";
+import {  utils }   from "@krigga/ffjavascript";
 const {unstringifyBigInts} = utils;
 
 export default async function groth16Verify(_vk_verifier, _publicSignals, _proof, logger) {

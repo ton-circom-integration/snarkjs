@@ -20,7 +20,7 @@
 /* global window */
 import Blake2b from "blake2b-wasm";
 import readline from "readline";
-import { ChaCha } from "ffjavascript";
+import { ChaCha } from "@krigga/ffjavascript";
 import crypto from "crypto";
 
 const _revTable = [];

@@ -17,7 +17,7 @@
     snarkjs. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import {Scalar} from "ffjavascript";
+import {Scalar} from "@krigga/ffjavascript";
 import jsSha3 from "js-sha3";
 const { keccak256 } = jsSha3;
 

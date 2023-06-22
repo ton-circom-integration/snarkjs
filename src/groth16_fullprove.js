@@ -19,7 +19,7 @@
 
 import groth16_prove from "./groth16_prove.js";
 import wtns_calculate from "./wtns_calculate.js";
-import {utils} from "ffjavascript";
+import {utils} from "@krigga/ffjavascript";
 const {unstringifyBigInts} = utils;
 
 export default async function groth16FullProve(_input, wasmFile, zkeyFileName, logger) {

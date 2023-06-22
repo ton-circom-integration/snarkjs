@@ -22,7 +22,7 @@ import * as zkeyUtils from "./zkey_utils.js";
 import * as wtnsUtils from "./wtns_utils.js";
 import { getCurveFromQ as getCurve } from "./curves.js";
 import { log2 } from "./misc.js";
-import { Scalar, utils, BigBuffer } from "ffjavascript";
+import { Scalar, utils, BigBuffer } from "@krigga/ffjavascript";
 const {stringifyBigInts} = utils;
 
 export default async function groth16Prove(zkeyFileName, witnessFileName, logger) {

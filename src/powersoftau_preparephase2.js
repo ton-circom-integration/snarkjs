@@ -19,7 +19,7 @@
 
 import * as binFileUtils from "@iden3/binfileutils";
 import * as utils from "./powersoftau_utils.js";
-import {BigBuffer} from "ffjavascript";
+import {BigBuffer} from "@krigga/ffjavascript";
 
 export default async function preparePhase2(oldPtauFilename, newPTauFilename, logger) {
 

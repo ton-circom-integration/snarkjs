@@ -22,10 +22,9 @@
 import * as binFileUtils from "@iden3/binfileutils";
 import * as zkeyUtils from "./zkey_utils.js";
 import * as wtnsUtils from "./wtns_utils.js";
-import { Scalar, utils, BigBuffer } from "ffjavascript";
+import { Scalar, utils, BigBuffer } from "@krigga/ffjavascript";
 const {stringifyBigInts} = utils;
 import { Proof } from "./proof.js";
-import { Keccak256Transcript } from "./Keccak256Transcript.js";
 import { MulZ } from "./mul_z.js";
 import {  ZKEY_PL_HEADER_SECTION,
     ZKEY_PL_ADDITIONS_SECTION,
@@ -44,7 +43,7 @@ import {  ZKEY_PL_HEADER_SECTION,
 import { Polynomial } from "./polynomial/polynomial.js";
 import { Evaluations } from "./polynomial/evaluations.js";
     
-export default async function plonk16Prove(zkeyFileName, witnessFileName, logger) {
+export default async function plonk16Prove(zkeyFileName, witnessFileName, logger, Transcript) {
     const {fd: fdWtns, sections: sectionsWtns} = await binFileUtils.readBinFile(witnessFileName, "wtns", 2, 1<<25, 1<<23);
 
     // Read witness file
@@ -102,7 +101,7 @@ export default async function plonk16Prove(zkeyFileName, witnessFileName, logger
 
     let challenges = {};
     let proof = new Proof(curve, logger);
-    const transcript = new Keccak256Transcript(curve);
+    const transcript = new Transcript(curve);
 
     if (logger) logger.debug(`> Reading Section ${ZKEY_PL_ADDITIONS_SECTION}. Additions`);
     await calculateAdditions();

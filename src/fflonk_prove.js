@@ -20,7 +20,7 @@
 import * as binFileUtils from "@iden3/binfileutils";
 import * as zkeyUtils from "./zkey_utils.js";
 import * as wtnsUtils from "./wtns_utils.js";
-import { BigBuffer, Scalar, utils } from "ffjavascript";
+import { BigBuffer, Scalar, utils } from "@krigga/ffjavascript";
 import { FFLONK_PROTOCOL_ID } from "./zkey_constants.js";
 import {
     ZKEY_FF_A_MAP_SECTION,

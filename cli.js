@@ -31,7 +31,7 @@ import clProcessor from "./src/clprocessor.js";
 
 import * as powersOfTau from "./src/powersoftau.js";
 
-import {utils} from "ffjavascript";
+import {utils} from "@krigga/ffjavascript";
 
 const {stringifyBigInts} = utils;
 
@@ -41,6 +41,8 @@ import * as plonk from "./src/plonk.js";
 import * as fflonk from "./src/fflonk.js";
 import * as wtns from "./src/wtns.js";
 import * as curves from "./src/curves.js";
+import { Sha256Transcript } from "./src/Sha256Transcript.js";
+import { Keccak256Transcript } from "./src/Keccak256Transcript.js";
 import path from "path";
 import bfj from "bfj";
 
@@ -254,6 +256,18 @@ const commands = [
         action: zkeyExportSolidityCalldata
     },
     {
+        cmd: "zkey export funcverifier [circuit_final.zkey] [verifier.func]",
+        description: "Creates a verifier in func",
+        alias: ["zkefv", "generatefuncverifier -vk|verificationkey -v|verifier"],
+        action: zkeyExportFuncVerifier
+    },
+    {
+        cmd: "zkey export funccalldata [public.json] [proof.json]",
+        description: "Generates call parameters ready to be called.",
+        alias: ["zkefc", "generatefunccall -pub|public -p|proof"],
+        action: zkeyExportFuncCalldata
+    },
+    {
         cmd: "groth16 setup [circuit.r1cs] [powersoftau.ptau] [circuit_0000.zkey]",
         description: "Creates an initial groth16 pkey file with zero contributions",
         alias: ["g16s", "zkn", "zkey new"],
@@ -291,21 +305,21 @@ const commands = [
         cmd: "plonk prove [circuit.zkey] [witness.wtns] [proof.json] [public.json]",
         description: "Generates a PLONK Proof from witness",
         alias: ["pkp"],
-        options: "-verbose|v -protocol",
+        options: "-verbose|v -protocol -transcript",
         action: plonkProve
     },
     {
         cmd: "plonk fullprove [input.json] [circuit.wasm] [circuit.zkey] [proof.json] [public.json]",
         description: "Generates a PLONK Proof from input",
         alias: ["pkf"],
-        options: "-verbose|v -protocol",
+        options: "-verbose|v -protocol -transcript",
         action: plonkFullProve
     },
     {
         cmd: "plonk verify [verification_key.json] [public.json] [proof.json]",
         description: "Verify a PLONK Proof",
         alias: ["pkv"],
-        options: "-verbose|v",
+        options: "-verbose|v -transcript",
         action: plonkVerify
     },
     {
@@ -683,6 +697,73 @@ async function zkeyExportSolidityCalldata(params, options) {
         res = await fflonk.exportSolidityCallData(pub, proof);
     } else {
         throw new Error("Invalid Protocol");
+    }
+    console.log(res);
+
+    return 0;
+}
+
+// zkey export funcverifier [circuit_final.zkey] [verifier.sol]
+async function zkeyExportFuncVerifier(params, options) {
+    let zkeyName;
+    let verifierName;
+
+    if (params.length < 1) {
+        zkeyName = "circuit_final.zkey";
+    } else {
+        zkeyName = params[0];
+    }
+
+    if (params.length < 2) {
+        verifierName = "verifier.func";
+    } else {
+        verifierName = params[1];
+    }
+
+    if (options.verbose) Logger.setLogLevel("DEBUG");
+
+    const templates = {};
+
+    if (await fileExists(path.join(__dirname, "templates"))) {
+        templates.plonk = await fs.promises.readFile(path.join(__dirname, "templates", "verifier_plonk.func.ejs"), "utf8");
+    } else {
+        templates.plonk = await fs.promises.readFile(path.join(__dirname, "..", "templates", "verifier_plonk.func.ejs"), "utf8");
+    }
+
+    const verifierCode = await zkey.exportFuncVerifier(zkeyName, templates, logger);
+
+    fs.writeFileSync(verifierName, verifierCode, "utf-8");
+
+    return 0;
+}
+
+// zkey export funccalldata <public.json> <proof.json>
+async function zkeyExportFuncCalldata(params, options) {
+    let publicName;
+    let proofName;
+
+    if (params.length < 1) {
+        publicName = "public.json";
+    } else {
+        publicName = params[0];
+    }
+
+    if (params.length < 2) {
+        proofName = "proof.json";
+    } else {
+        proofName = params[1];
+    }
+
+    if (options.verbose) Logger.setLogLevel("DEBUG");
+
+    const pub = JSON.parse(fs.readFileSync(publicName, "utf8"));
+    const proof = JSON.parse(fs.readFileSync(proofName, "utf8"));
+
+    let res;
+    if (proof.protocol == "plonk") {
+        res = await plonk.exportFuncCallData(proof, pub);
+    } else {
+        throw new Error("protocol "+proof.protocol+" is not supported for func");
     }
     console.log(res);
 
@@ -1142,7 +1223,9 @@ async function plonkProve(params, options) {
 
     if (options.verbose) Logger.setLogLevel("DEBUG");
 
-    const {proof, publicSignals} = await plonk.prove(zkeyName, witnessName, logger);
+    const transcript = options.transcript === "sha256" ? Sha256Transcript : Keccak256Transcript;
+
+    const {proof, publicSignals} = await plonk.prove(zkeyName, witnessName, logger, transcript);
 
     await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
     await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
@@ -1162,9 +1245,11 @@ async function plonkFullProve(params, options) {
 
     if (options.verbose) Logger.setLogLevel("DEBUG");
 
+    const transcript = options.transcript === "sha256" ? Sha256Transcript : Keccak256Transcript;
+
     const input = JSON.parse(await fs.promises.readFile(inputName, "utf8"));
 
-    const {proof, publicSignals} = await plonk.fullProve(input, wasmName, zkeyName, logger);
+    const {proof, publicSignals} = await plonk.fullProve(input, wasmName, zkeyName, logger, transcript);
 
     await bfj.write(proofName, stringifyBigInts(proof), {space: 1});
     await bfj.write(publicName, stringifyBigInts(publicSignals), {space: 1});
@@ -1186,7 +1271,9 @@ async function plonkVerify(params, options) {
 
     if (options.verbose) Logger.setLogLevel("DEBUG");
 
-    const isValid = await plonk.verify(verificationKey, pub, proof, logger);
+    const transcript = options.transcript === "sha256" ? Sha256Transcript : Keccak256Transcript;
+
+    const isValid = await plonk.verify(verificationKey, pub, proof, logger, transcript);
 
     if (isValid) {
         return 0;

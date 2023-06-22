@@ -25,7 +25,7 @@ import * as misc from "./misc.js";
 import { hashToG2 as hashToG2 } from "./keypair.js";
 const sameRatio = misc.sameRatio;
 import {hashG1, hashPubKey} from "./zkey_utils.js";
-import { Scalar, ChaCha, BigBuffer } from "ffjavascript";
+import { Scalar, ChaCha, BigBuffer } from "@krigga/ffjavascript";
 
 
 
